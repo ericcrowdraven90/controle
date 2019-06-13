@@ -1,0 +1,183 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Controle de Alunos</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+
+</head>
+<body>
+    <div><h2>Cadastro de Alunos</h2></div>
+<form action="" method="post">
+<label for="nome">Nome:</label>
+<input type="text" name="" id="nome"><br>
+<label for="datanascimento">Data de Nascimento:</label>
+<input type="text" name="" id="datanascimento"><br>
+<label for="cpf">CPF:</label>
+<input type="text" name="" id="cpf"><br>
+<label for="telefone">TELEFONE:</label>
+<input type="text" name="" id="telefone"><br>
+<label for="endereco">Endereço:</label>
+<input type="text" name="" id="endereco"><br>
+<label for="sexo">Sexo:</label>
+<input type="text" name="" id="sexo"><br><br>
+
+<button type="button" id="btnAdd" onclick="addAluno();">
+    Adicionar Aluno
+</button>
+
+
+</form>
+
+
+
+
+
+    <table id="tblistar">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome:</th>
+                <th>Data de Nascimento:</th>
+                <th>CPF:</th>
+                <th>Telefone:</th>
+                <th>Endereço:</th>
+                <th>Sexo:</th>
+                <th>Apagar:</th>
+                <th>Editar:</th>
+            </tr>
+        </thead>
+
+    </table>
+</body>
+</html>
+
+
+
+<script type="text/javascript">
+var _linha = null;
+//Próximo ID a ser incluído na tabela
+var _proximoID = 1;
+//ID do aluno atual a ser editado
+var _ativoID = 0;
+
+//Função chamada ao se clicar no botão Alunos
+function addAluno(){
+    if ($("btnAdd").text() == "Atualizar"){
+        atualizaValor(_ativoID);
+    }else{
+        pegavalor();
+    }
+  //captura valores dos campos INPUT
+  pegavalor();
+  //limpa campos do formulário
+  limpaform();
+//Mantém o foco para o campo nome
+$("#nome").focus();
+}
+
+function atualizaValor(id){
+   var linha = $("#btnAdd button[data-id='"+ id +"']").parents("tr")[0];
+
+    //Adfciona linha modifica tabela
+$(_linha).after(atualizaTabela());
+//remove linha antiga
+$(_linha).remove();
+//Limpa Formulário
+limpaform();
+//Muda Texto do Botão
+$("btnAdd").text("Adicionar Aluno");
+}
+
+
+function pegavalor(){
+    if ( $("#tblistar tbody").length == 0){
+        $("#tblistar").append("<tbody></tbody>");
+    }
+
+    //adicionar linhas
+    $("#tblistar tbody").append(
+        "<tr>"+
+            "<td>1</td>"+
+            "<td>"+ $("#nome").val() +"</td>"+
+            "<td>"+ $("#datanascimento").val() +"</td>"+
+            "<td>"+ $("#cpf").val() +"</td>"+
+            "<td>"+ $("#telefone").val() +"</td>"+
+            "<td>"+ $("#endereco").val() +"</td>"+
+            "<td>"+ $("#sexo").val() +"</td>"+
+            "<td>"+ 
+                "<button type='button' onclick='apagaLinha(this);'> X </button>"+
+                "</td>"+
+                "<td>"+
+                    "<button type='button' onclick='editaLinha(this);'> Editar </button>" + 
+                "</td>"+
+        "</tr>"
+
+    );
+
+}
+
+function atualizaTabela(id){
+    var linha = 
+    "<tr>"+
+            "<td>1</td>"+
+            "<td>"+ $("#nome").val() +"</td>"+
+            "<td>"+ $("#datanascimento").val() +"</td>"+
+            "<td>"+ $("#cpf").val() +"</td>"+
+            "<td>"+ $("#telefone").val() +"</td>"+
+            "<td>"+ $("#endereco").val() +"</td>"+
+            "<td>"+ $("#sexo").val() +"</td>"+
+            "<td>"+ 
+                "<button type='button' data-id="+ id +" onclick='apagaLinha(this);'> X </button>"+
+                "</td>"+
+                "<td>"+
+                    "<button type='button' data-id="+ id +" onclick='editaLinha(this);'> Editar </button>" + 
+                "</td>"+
+        "</tr>"
+return linha;
+}
+
+function apagaLinha(botao_apagar){
+$(botao_apagar).parents("tr").remove();
+}
+
+
+//Função que apaga o conteúdo do formulário para nova adição
+function limpaform(){
+    $("#nome").val("");
+    $("#datanascimento").val("");
+    $("#cpf").val("");
+    $("#telefone").val("");
+    $("#endereco").val("");
+    $("#sexo").val("");
+}
+     //Captura os valores de cada coluna da linha atual e atribui
+function editaLinha(botao_editar){
+    _linha = $(botao_editar).parents("tr");
+    var cols = _linha.children("td");
+    _ativoID = $($cols[6].children("button")[0].data("id"));
+
+    $("#nome").val($ (cols[1]).text() );
+    $("#datanascimento").val($ (cols[2]).text() );
+    $("#cpf").val($ (cols[3]).text() );
+    $("#telefone").val($ (cols[4]).text() );
+    $("#endereco").val($ (cols[5]).text() );
+    $("#sexo").val($ (cols[6]).text() );
+
+    $("#btnAdd").text("Atualizar");
+
+
+}
+
+
+$(document).ready(function(){
+    addlinha();
+   
+});
+
+
+</script>
+
+
+
